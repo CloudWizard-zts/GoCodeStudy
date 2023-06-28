@@ -73,6 +73,22 @@ func main() {
     }
 }
 ```
-这段代码使用了for循环，因此for会一直循环`select`语句，r就可以接收到来自chanInt和chanString的值，因为我们已经关闭了通道，所以在循环两次接收完chanInt和chanString的值之后，就会出发特性3：如果没有可运行的`case`语句，且有`default`语句，那么就会执行`default`的动作
+```go
+运行结果：
+default...
+chanInt: 100
+chanString: hello
+chanInt: 0
+chanString: 
+chanInt: 0
+chanString: 
+chanString: 
+chanInt: 0
+chanString: 
+...
+```
+因为我们关闭了通道，所以读取完chanInt和chanString之后会读取一个默认值；当一个通道关闭后，在接收方试图从已关闭的通道中接收数据时，如果通道中还有未接收的数据，则会直接返回该值。但当通道中没有未接收的数据时，即使通道已关闭，接收操作也会立即返回对应类型的零值
+如果一个通道没有被关闭，而接收方试图从通道中接收数据，但通道中没有数据可供接收，接收操作将会阻塞，直到有数据被发送到通道中或通道被关闭。
+所以如果我们使用了`close`关闭通道，那么循环会一直输出默认值。相反，如果没有使用`slose`，那么就会触发select的第三个特性： 如果没有可运行的`case`语句，且有`default`语句，那么就会执行`default`的动作
 
 
