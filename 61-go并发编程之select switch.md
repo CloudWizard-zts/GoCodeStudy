@@ -56,8 +56,8 @@ func main() {
     go func() {
         chanInt <- 100
         chanString <- "hello"
-        close(chanInt) // 关闭通道
-        close(chanString) // 关闭通道
+        close(chanInt) // 关闭通道，尝试注释后查看运行结果
+        close(chanString) // 关闭通道，尝试注释后查看运行结果
     }()
 
     for {
